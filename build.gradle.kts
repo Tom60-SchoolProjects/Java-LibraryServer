@@ -14,6 +14,11 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+
+
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("com.moandjiezana.toml:toml4j:0.7.2")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 }
 
 tasks.test {
