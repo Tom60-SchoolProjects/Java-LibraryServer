@@ -1,18 +1,19 @@
 package requests
 
-import Environement
-import models.BookModel
+import Environment
+import com.akuleshov7.ktoml.Toml
+import kotlinx.serialization.encodeToString
 import models.ReaderModel
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class ReaderRequest {
-    fun post(book: ReaderModel, callback: Callback) {
-        val toml = book.toToml()
+    fun post(reader: ReaderModel, callback: Callback) {
+        val toml = Toml.encodeToString(reader)
 
         val okHttpClient = OkHttpClient()
-        val requestBody = toml.toRequestBody("application/json".toMediaTypeOrNull())
+        val requestBody = toml.toRequestBody("application/toml".toMediaTypeOrNull())
         val request = Request.Builder()
             .method("POST", requestBody)
             .url(url)
@@ -21,6 +22,6 @@ class ReaderRequest {
     }
 
     companion object {
-        private var url = Environement.url + "/reader"
+        private var url = Environment.url + "/reader"
     }
 }
