@@ -6,32 +6,46 @@ import requests.ReaderRequest
 
 val client = OkHttpClient()
 
+/**
+ * Entry point of the program
+ */
 fun main() {
 
+    // Check if the server is running
     if (checkServer())
         println("Connected to server")
     else {
         println("Server is not running")
-        return
+        return // Exit application
     }
 
+    // Loop until the user wants to exit
     while (true) {
+        // Display choices
         println("1. Add book")
         println("2. Add reader")
-        println("3. Exit")
+        println("3. Disconnect ¯\\_(ツ)_/¯")
+        println("4. Exit")
         println()
         print("Enter your choice: ")
 
+        // Read user input
         when (readln().toIntOrNull()) {
+
+            // Add book
             1 -> {
+                // Ask user for book information
                 val book = newBook()
 
+                // Send request to server
                 val request = BookRequest()
                 request.post(book, object : Callback {
+                    // If the request fails
                     override fun onFailure(call: Call, e: java.io.IOException) {
                         println("Failed to execute request")
                     }
 
+                    // If the request succeeds
                     override fun onResponse(call: Call, response: Response) {
                         if (response.isSuccessful)
                             println("Book added successfully")
@@ -40,15 +54,21 @@ fun main() {
                     }
                 })
             }
+
+            // Add reader
             2 -> {
+                // Ask user for reader information
                 val reader = newReader()
 
+                // Send request to server
                 val request = ReaderRequest()
                 request.post(reader, object : Callback {
+                    // If the request fails
                     override fun onFailure(call: Call, e: java.io.IOException) {
                         println("Failed to execute request")
                     }
 
+                    // If the request succeeds
                     override fun onResponse(call: Call, response: Response) {
                         if(response.isSuccessful)
                             println("Reader added successfully")
@@ -57,7 +77,21 @@ fun main() {
                     }
                 })
             }
+
+            // Disconnect (¯\_(ツ)_/¯)
+            // In case this wasn't obvious enough, this is a joke
             3 -> {
+                println("Disconnecting gracefully...")
+                val request = Request.Builder()
+                    .url(Environment.url + "/gracefully/disconnect")
+                    .build()
+
+                client.newCall(request).execute()
+                throw Exception("Disconnected gracefully!")
+            }
+
+            // Exit application
+            4 -> {
                 println("Exiting...")
                 break
             }
@@ -68,6 +102,10 @@ fun main() {
     }
 }
 
+/**
+ * Check if the server is running
+ * @return true if the server is running, false otherwise
+ */
 fun checkServer(): Boolean {
     val request = Request.Builder()
         .url(Environment.url)
@@ -81,6 +119,10 @@ fun checkServer(): Boolean {
     }
 }
 
+/**
+ * Ask user for book information
+ * @return The book
+ */
 fun newBook(): BookModel {
     println("Enter the title of the book:")
     val title: String = readln()
@@ -94,6 +136,10 @@ fun newBook(): BookModel {
     return BookModel(title, author, language, genre)
 }
 
+/**
+ * Ask user for reader information
+ * @return The reader
+ */
 fun newReader(): ReaderModel {
     println("Enter the name of the reader:")
     val name: String = readln()

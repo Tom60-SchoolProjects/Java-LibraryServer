@@ -8,7 +8,15 @@ import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 
+/**
+ * ReaderRequest is a class that contains functions to send reader request to the server
+ */
 class ReaderRequest {
+    /**
+     * Send a POST request to the server to add a reader
+     * @param reader The reader to add
+     * @param callback The callback to execute when the request is done
+     */
     fun post(reader: ReaderModel, callback: Callback) {
         val toml = Toml.encodeToString(reader)
 
