@@ -33,7 +33,7 @@ fun main() {
                     }
 
                     override fun onResponse(call: Call, response: Response) {
-                        if (response.code == 200)
+                        if (response.isSuccessful)
                             println("Book added successfully")
                         else
                             println("Failed to add book (Status code: ${response.code})")
@@ -50,7 +50,10 @@ fun main() {
                     }
 
                     override fun onResponse(call: Call, response: Response) {
-                        println("Reader added successfully")
+                        if(response.isSuccessful)
+                            println("Reader added successfully")
+                        else
+                            println("Failed to add reader (Status code: ${response.code})")
                     }
                 })
             }
